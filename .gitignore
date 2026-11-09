@@ -1,0 +1,7 @@
+.DS_Store
+# başkasına ait indirilmiş görseller
+quotefancy-gorseller/
+# 16:9 orijinaller yerelde
+uretilen/
+# cerceve/'nin hard link kopyası, araclar/drive_klasoru.py üretir
+drive/

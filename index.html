@@ -1,0 +1,574 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Söz Duvarı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;800&family=Playfair+Display:ital,wght@1,600&family=Raleway:wght@500;700&family=Ubuntu:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0d0d0e; --panel:#151517; --panel2:#1c1c1f; --line:#2a2a2e;
+    --text:#ececee; --muted:#8d8d95; --accent:#e9a23b; --accent-ink:#1a1206;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--text);font:14px/1.45 Inter,system-ui,sans-serif;display:grid;grid-template-columns:340px 1fr;overflow:hidden}
+  aside{background:var(--panel);border-right:1px solid var(--line);overflow-y:auto;padding:18px 18px 40px}
+  .brand{display:flex;align-items:baseline;gap:8px;margin-bottom:18px}
+  .brand b{font-size:17px;letter-spacing:-.01em}
+  .brand span{color:var(--muted);font-size:12px}
+  section{border-top:1px solid var(--line);padding:16px 0 6px}
+  h3{margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  label.f{display:block;margin-bottom:12px}
+  label.f > span{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px}
+  label.f > span output{color:var(--text);font-variant-numeric:tabular-nums}
+  textarea,input[type=text],input[type=url],input[type=number],select{
+    width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--text);
+    border-radius:8px;padding:9px 10px;font:inherit;outline:none}
+  textarea{resize:vertical;min-height:84px}
+  textarea:focus,input:focus,select:focus{border-color:#4a4a52}
+  input[type=range]{width:100%;accent-color:var(--accent)}
+  input[type=color]{width:38px;height:30px;border:1px solid var(--line);border-radius:6px;background:none;padding:2px;cursor:pointer}
+  .row{display:flex;gap:8px;align-items:center}
+  .row > *{flex:1}
+  .check{display:flex;align-items:center;gap:8px;font-size:13px;margin-bottom:10px;cursor:pointer}
+  .check input{accent-color:var(--accent);width:15px;height:15px}
+  button,.btn{background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:8px;padding:8px 12px;font:inherit;font-size:13px;cursor:pointer;white-space:nowrap}
+  button:hover,.btn:hover{border-color:#4a4a52}
+  .seg{display:flex;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:3px;gap:3px;margin-bottom:12px}
+  .seg button{flex:1;border:0;background:none;padding:7px 6px;color:var(--muted)}
+  .seg button.on{background:#2c2c31;color:var(--text)}
+  .styles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+  .styles button{padding:0;overflow:hidden;border-radius:9px;display:flex;flex-direction:column}
+  .styles button.on{border-color:var(--accent)}
+  .styles i{display:grid;place-items:center;height:54px;background:#3a3631;font-style:normal;color:#fff;font-size:11px}
+  .styles small{padding:6px;font-size:12px;color:var(--muted)}
+  .styles button.on small{color:var(--text)}
+  .sw-sade{font:700 13px Raleway;opacity:.85}
+  .sw-bant b{background:#000;padding:1px 4px;font:400 12px Ubuntu}
+  .sw-min{font:italic 600 13px "Playfair Display"}
+  .thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+  .thumbs img{width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:6px;cursor:pointer;border:2px solid transparent;background:var(--panel2)}
+  .thumbs img.on{border-color:var(--accent)}
+  .thumbs.scroll{max-height:330px;overflow-y:auto;padding-right:4px;margin-bottom:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+  .chips button{padding:5px 10px;border-radius:20px;font-size:12px;color:var(--muted)}
+  .chips button.on{background:var(--text);color:var(--bg);border-color:var(--text)}
+  .chips button em{font-style:normal;opacity:.6;margin-left:4px;font-size:11px}
+  .hint{font-size:12px;color:var(--muted);margin:-4px 0 12px}
+  .hint a{color:inherit}
+  .gal{position:fixed;inset:0;z-index:8;background:rgba(10,10,11,.96);display:flex;flex-direction:column}
+  .gal header{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .gal header .chips{margin:0;flex:1}
+  .gal .thumbs{flex:1;overflow-y:auto;padding:18px 20px;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;align-content:start;margin:0}
+  [hidden]{display:none!important}
+
+  main{display:flex;flex-direction:column;min-width:0;min-height:0}
+  .bar{display:flex;gap:10px;align-items:center;padding:12px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .bar select{width:auto;min-width:210px}
+  .bar input[type=number]{width:84px}
+  .bar .x{color:var(--muted)}
+  .bar .sp{flex:1}
+  .dl{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:600;padding:9px 18px}
+  .dl:hover{background:#f1b14f;border-color:#f1b14f}
+  .stage{flex:1;min-height:0;display:grid;place-items:center;padding:28px;position:relative}
+  #view{display:block;box-shadow:0 18px 50px rgba(0,0,0,.55);border-radius:4px;background:#000}
+  .status{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:#232327;border:1px solid var(--line);padding:6px 12px;border-radius:20px;font-size:12px;color:var(--muted);transition:opacity .2s;pointer-events:none}
+  .drop{position:fixed;inset:0;background:rgba(13,13,14,.85);display:grid;place-items:center;font-size:18px;z-index:9;border:2px dashed var(--accent)}
+
+  @media (max-width:820px){
+    body{grid-template-columns:1fr;grid-template-rows:auto 1fr;overflow:auto;height:auto}
+    aside{order:2;border-right:0;overflow:visible}
+    main{order:1;height:auto}
+    .stage{height:60vh;padding:16px}
+    .bar select{min-width:0;flex:1}
+  }
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand"><b>Söz Duvarı</b><span>motivasyon duvar kağıdı stüdyosu</span></div>
+
+  <section>
+    <h3>Söz</h3>
+    <label class="f"><textarea data-k="quote" rows="3"></textarea></label>
+    <label class="f"><input type="text" data-k="author" placeholder="Yazar"></label>
+    <div class="row" style="margin-bottom:12px">
+      <button id="randQuote">Rastgele söz</button>
+    </div>
+    <label class="check"><input type="checkbox" data-k="showAuthor"> Yazarı göster</label>
+    <label class="check"><input type="checkbox" data-k="upper"> BÜYÜK HARF</label>
+  </section>
+
+  <section>
+    <h3>Stil</h3>
+    <div class="styles" id="styles">
+      <button data-style="sade"><i><span class="sw-sade">Stay hungry.</span></i><small>Sade</small></button>
+      <button data-style="bant"><i><span class="sw-bant"><b>Without a</b></span></i><small>Bant</small></button>
+      <button data-style="minimal"><i><span class="sw-min">“Sessiz”</span></i><small>Minimal</small></button>
+    </div>
+    <label class="f"><span>Yazı tipi</span><select data-k="font" id="fontSel"></select></label>
+    <label class="f"><span>Yazı boyutu <output data-o="size"></output></span><input type="range" data-k="size" min="3" max="16" step="0.1"></label>
+    <label class="f"><span>Satır genişliği <output data-o="width"></output></span><input type="range" data-k="width" min="30" max="95" step="1"></label>
+    <label class="f"><span>Dikey konum <output data-o="posY"></output></span><input type="range" data-k="posY" min="10" max="90" step="1"></label>
+    <div class="seg" id="alignSeg"><button data-align="center">Ortala</button><button data-align="left">Sola yasla</button></div>
+    <label class="f" data-only="bant"><span>Bant koyuluğu <output data-o="box"></output></span><input type="range" data-k="box" min="0" max="100" step="1"></label>
+    <label class="f" data-only="sade minimal"><span>Yazı opaklığı <output data-o="textOp"></output></span><input type="range" data-k="textOp" min="30" max="100" step="1"></label>
+    <div class="row" style="margin-bottom:12px">
+      <span style="color:var(--muted);font-size:12px;flex:0 0 auto">Yazar etiketi</span>
+      <span></span>
+      <input type="color" data-k="authorColor" style="flex:0 0 auto">
+    </div>
+  </section>
+
+  <section>
+    <h3>Arka plan</h3>
+    <div class="chips" data-chips></div>
+    <div class="thumbs scroll" id="thumbs"></div>
+    <p class="hint" id="credit"></p>
+    <div class="row" style="margin-bottom:10px">
+      <button id="randBg">Rastgele</button>
+      <button id="openGal">Büyük galeri</button>
+      <label class="btn" style="text-align:center">Yükle<input type="file" id="file" accept="image/*" hidden></label>
+    </div>
+    <p class="hint">← → tuşlarıyla fotoğraflar arasında gezebilir, kendi görselini sürükleyip bırakabilir ya da yapıştırabilirsin (⌘V).</p>
+    <label class="f"><input type="url" id="urlIn" placeholder="ya da görsel bağlantısı yapıştır"></label>
+    <label class="f"><span>Karartma <output data-o="dark"></output></span><input type="range" data-k="dark" min="0" max="90" step="1"></label>
+    <label class="f"><span>Bulanıklık <output data-o="blur"></output></span><input type="range" data-k="blur" min="0" max="40" step="1"></label>
+    <label class="f"><span>Yakınlaştırma <output data-o="zoom"></output></span><input type="range" data-k="zoom" min="100" max="250" step="1"></label>
+    <label class="f"><span>Yatay odak <output data-o="fx"></output></span><input type="range" data-k="fx" min="0" max="100" step="1"></label>
+    <label class="f"><span>Dikey odak <output data-o="fy"></output></span><input type="range" data-k="fy" min="0" max="100" step="1"></label>
+    <label class="check"><input type="checkbox" data-k="gray"> Siyah-beyaz</label>
+    <div class="row" style="margin-bottom:10px">
+      <button id="noImg">Görselsiz (düz renk)</button>
+      <input type="color" data-k="bgColor" style="flex:0 0 auto">
+    </div>
+  </section>
+
+  <section>
+    <h3>İmza</h3>
+    <label class="f"><input type="text" data-k="sign" placeholder="Alt köşeye küçük not (isteğe bağlı)"></label>
+  </section>
+</aside>
+
+<main>
+  <div class="bar">
+    <select id="sizeSel"></select>
+    <input type="number" id="wIn" min="200" max="8000"><span class="x">×</span><input type="number" id="hIn" min="200" max="8000">
+    <button id="swap" title="Yatay / dikey çevir">⇄</button>
+    <span class="sp"></span>
+    <select id="fmt" style="min-width:0"><option value="png">PNG</option><option value="jpg">JPG</option></select>
+    <button class="dl" id="dl">İndir</button>
+  </div>
+  <div class="stage" id="stage">
+    <canvas id="view"></canvas>
+    <div class="status" id="status" style="opacity:0"></div>
+  </div>
+</main>
+<div class="drop" id="drop" hidden>Görseli bırak</div>
+<div class="gal" id="gal" hidden>
+  <header>
+    <b>Arka plan galerisi</b>
+    <div class="chips" data-chips></div>
+    <button id="closeGal">Kapat (Esc)</button>
+  </header>
+  <div class="thumbs" id="galGrid"></div>
+</div>
+
+<script src="arkaplanlar.js"></script>
+<script>
+const FONTS = {
+  raleway:   {label:'Raleway',          fam:'Raleway',          w:700, aFam:'Raleway', aW:500},
+  ubuntu:    {label:'Ubuntu',           fam:'Ubuntu',           w:400, aFam:'Ubuntu',  aW:400},
+  montserrat:{label:'Montserrat',       fam:'Montserrat',       w:800, aFam:'Montserrat', aW:500},
+  playfair:  {label:'Playfair (italik)',fam:'Playfair Display', w:600, it:true, aFam:'Inter', aW:500},
+  bebas:     {label:'Bebas Neue',       fam:'Bebas Neue',       w:400, lh:.88, aFam:'Inter', aW:500},
+  inter:     {label:'Inter',            fam:'Inter',            w:700, aFam:'Inter', aW:400},
+};
+const STYLES = {
+  sade:   {font:'raleway',  size:8,   lh:1.15},
+  bant:   {font:'ubuntu',   size:7.5, lh:1.22},
+  minimal:{font:'playfair', size:6.5, lh:1.3},
+};
+const SIZES = [
+  ['Telefon', [['iphone-pm','iPhone 16 Pro Max',1320,2868],['iphone','iPhone 16 / 15',1179,2556],['iphone-se','iPhone SE',750,1334],['android','Android (FHD+)',1080,2400]]],
+  ['Tablet', [['ipad-pro','iPad Pro 13"',2064,2752],['ipad','iPad 11"',1640,2360]]],
+  ['Bilgisayar', [['mba13','MacBook Air 13"',2560,1664],['mbp14','MacBook Pro 14"',3024,1964],['mbp16','MacBook Pro 16"',3456,2234],['imac','iMac 24"',4480,2520]]],
+  ['Monitör', [['fhd','Full HD',1920,1080],['qhd','QHD 1440p',2560,1440],['4k','4K',3840,2160],['5k','5K',5120,2880],['uw','Ultrawide',3440,1440]]],
+  ['Sosyal', [['ig','Instagram gönderi',1080,1350],['story','Hikâye / Reels',1080,1920],['wide','X / LinkedIn',1600,900]]],
+];
+const QUOTES = [
+  ['Stay hungry. Stay foolish.','Steve Jobs'],
+  ['Without a struggle, there can be no progress.','Frederick Douglass'],
+  ['The best way out is always through.','Robert Frost'],
+  ['Done is better than perfect.','Sheryl Sandberg'],
+  ['Hayatta en hakiki mürşit ilimdir.','Mustafa Kemal Atatürk'],
+  ['Bin millik yolculuk tek bir adımla başlar.','Lao Tzu'],
+  ['Ne kadar yavaş gittiğin önemli değil, yeter ki durma.','Konfüçyüs'],
+  ['Başarı, her gün tekrarlanan küçük çabaların toplamıdır.','Robert Collier'],
+  ['Yapabileceğine inan, yolu yarılamış olursun.','Theodore Roosevelt'],
+  ['Başlamanın yolu konuşmayı bırakıp yapmaya başlamaktır.','Walt Disney'],
+  ['Bir şey yapılana kadar hep imkânsız görünür.','Nelson Mandela'],
+  ['Ya bir yol bulacağım ya da bir yol açacağım.','Hannibal'],
+  ['Disiplin, hedeflerle başarı arasındaki köprüdür.','Jim Rohn'],
+  ['Kendin ol; diğer herkes zaten alınmış.','Oscar Wilde'],
+  ['Damlaya damlaya göl olur.','Atasözü'],
+  ['Zor zamanlar güçlü insanlar yaratır.','G. Michael Hopf'],
+];
+
+const DEF = {
+  quote:'Stay hungry. Stay foolish.', author:'Steve Jobs', showAuthor:true, upper:false,
+  style:'sade', font:'raleway', size:8, width:72, posY:50, align:'center', box:85, textOp:72,
+  authorColor:'#a8343c', dark:45, blur:0, zoom:100, fx:50, fy:50, gray:false, bgColor:'#1b1b1d',
+  sign:'', preset:'mbp14', W:3024, H:1964, bg:{type:'id', id:1018}, tag:'',
+};
+const TAGS = [['', 'Hepsi'], ['koyu', 'Koyu'], ['aydinlik', 'Aydınlık'], ['sicak', 'Sıcak'], ['soguk', 'Soğuk'], ['yesil', 'Yeşil'], ['renksiz', 'Renksiz']];
+const BG_BY_ID = new Map(ARKAPLANLAR.map(r => [r[0], r]));
+let S = {...DEF};
+try { const s = JSON.parse(localStorage.getItem('soz-duvari')); if (s) S = {...DEF, ...s}; } catch(e){}
+if (S.bg.type === 'file') S.bg = {...DEF.bg};
+const save = () => { try { localStorage.setItem('soz-duvari', JSON.stringify(S)); } catch(e){} };
+
+const $ = s => document.querySelector(s);
+const view = $('#view'), stage = $('#stage');
+let img = null, imgKey = '';
+
+/* ---------- metin yerleşimi ---------- */
+function wrap(c, t, maxW){
+  const out = [];
+  for (const para of t.split('\n')){
+    let line = '';
+    for (const w of para.split(/\s+/).filter(Boolean)){
+      const test = line ? line + ' ' + w : w;
+      if (line && c.measureText(test).width > maxW){ out.push(line); line = w; } else line = test;
+    }
+    out.push(line);
+  }
+  return out;
+}
+// aynı satır sayısını koruyan en dar genişliği bul: satırlar dengeli olsun
+function balance(c, t, maxW){
+  let best = wrap(c, t, maxW); const n = best.length;
+  if (n < 2) return best;
+  let lo = 0, hi = maxW;
+  for (let i = 0; i < 14; i++){
+    const mid = (lo + hi) / 2, l = wrap(c, t, mid);
+    if (l.length <= n){ hi = mid; best = l; } else lo = mid;
+  }
+  return best;
+}
+
+function render(cv, W, H){
+  const c = cv.getContext('2d'), u = Math.min(W, H);
+  c.save();
+  c.fillStyle = S.bgColor; c.fillRect(0, 0, W, H);
+  if (img && S.bg.type !== 'none'){
+    const sc = Math.max(W / img.naturalWidth, H / img.naturalHeight) * S.zoom / 100;
+    const dw = img.naturalWidth * sc, dh = img.naturalHeight * sc;
+    const dx = (W - dw) * S.fx / 100, dy = (H - dh) * S.fy / 100;
+    const b = S.blur * u / 1000, f = [];
+    if (b) f.push(`blur(${b}px)`);
+    if (S.gray) f.push('grayscale(1)');
+    c.filter = f.join(' ') || 'none';
+    const p = b * 2; // bulanık kenarların içe sızmaması için taşır
+    c.drawImage(img, dx - p, dy - p, dw + p * 2, dh + p * 2);
+    c.filter = 'none';
+  }
+  c.fillStyle = `rgba(0,0,0,${S.dark / 100})`; c.fillRect(0, 0, W, H);
+  drawText(c, W, H, u);
+  if (S.sign.trim()){
+    c.font = `500 ${u * .017}px Inter`; c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.fillStyle = 'rgba(255,255,255,.5)'; c.fillText(S.sign.trim(), W / 2, H - u * .04);
+  }
+  c.restore();
+}
+
+function drawText(c, W, H, u){
+  let txt = S.quote.trim(); if (!txt) return;
+  const st = STYLES[S.style], F = FONTS[S.font];
+  if (S.upper) txt = txt.toLocaleUpperCase('tr-TR');
+  if (S.style === 'minimal' && !/^[“"«]/.test(txt)) txt = '“' + txt + '”';
+  const author = S.showAuthor ? S.author.trim() : '';
+  const maxW = W * S.width / 100, lhM = st.lh * (F.lh || 1);
+  const setFont = s => c.font = `${F.it ? 'italic ' : ''}${F.w} ${s}px "${F.fam}"`;
+  let fs = u * S.size / 100, lines, total, afs, gap, aH;
+  for (let i = 0; i < 40; i++){
+    setFont(fs); lines = balance(c, txt, maxW);
+    afs = Math.max(fs * .42, u * .02);
+    gap = author ? fs * (S.style === 'minimal' ? .9 : .7) : 0;
+    aH = author ? afs * 1.9 : 0;
+    total = lines.length * fs * lhM + gap + aH;
+    const widest = Math.max(...lines.map(l => c.measureText(l).width));
+    if ((total <= H * .82 && widest <= W * .92) || fs < u * .02) break;
+    fs *= .94; // sığmıyorsa küçült
+  }
+  const m = H * .05;
+  let top = Math.min(Math.max(H * S.posY / 100 - total / 2, m), H - total - m);
+  const center = S.align === 'center';
+  const x = center ? W / 2 : (W - maxW) / 2;
+  const rowH = fs * lhM;
+  c.textAlign = center ? 'center' : 'left'; c.textBaseline = 'middle';
+
+  lines.forEach((l, i) => {
+    const y = top + i * rowH;
+    if (S.style === 'bant'){
+      const lw = c.measureText(l).width, pad = fs * .28, rh = rowH - fs * .07;
+      c.fillStyle = `rgba(0,0,0,${S.box / 100})`;
+      c.fillRect((center ? x - lw / 2 : x) - pad, y, lw + pad * 2, rh);
+      c.fillStyle = '#fff';
+      c.fillText(l, x, y + rh / 2 + fs * .04);
+    } else {
+      c.shadowColor = 'rgba(0,0,0,.45)'; c.shadowBlur = fs * (S.style === 'sade' ? .18 : .3);
+      c.fillStyle = `rgba(255,255,255,${S.textOp / 100})`;
+      c.fillText(l, x, y + rowH / 2 + fs * .04);
+      c.shadowColor = 'transparent'; c.shadowBlur = 0;
+    }
+  });
+  if (!author) return;
+
+  const ay = top + lines.length * rowH + gap;
+  if (S.style === 'minimal'){
+    const lineW = fs * 1.1, lh = Math.max(1, u * .0018);
+    c.fillStyle = 'rgba(255,255,255,.6)';
+    c.fillRect(center ? x - lineW / 2 : x, ay, lineW, lh);
+    c.font = `${F.aW} ${afs * .85}px "${F.aFam}"`;
+    const ls = afs * .22;
+    if ('letterSpacing' in c) c.letterSpacing = ls + 'px';
+    c.fillStyle = 'rgba(255,255,255,.85)';
+    c.fillText(author.toLocaleUpperCase('tr-TR'), x + (center ? ls / 2 : 0), ay + afs * 1.25);
+    if ('letterSpacing' in c) c.letterSpacing = '0px';
+    return;
+  }
+  c.font = `${F.aW} ${afs}px "${F.aFam}"`;
+  const aw = c.measureText(author).width, px = afs * .55, h = afs * 1.75;
+  c.globalAlpha = S.style === 'sade' ? .85 : 1;
+  c.fillStyle = S.authorColor;
+  c.fillRect((center ? x - aw / 2 : x) - px, ay, aw + px * 2, h);
+  c.globalAlpha = 1;
+  c.fillStyle = '#fff';
+  c.fillText(author, x, ay + h / 2 + afs * .04);
+}
+
+/* ---------- önizleme ---------- */
+let raf = 0;
+function draw(){
+  cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(async () => {
+    const F = FONTS[S.font];
+    await Promise.all([
+      document.fonts.load(`${F.it ? 'italic ' : ''}${F.w} 40px "${F.fam}"`, S.quote),
+      document.fonts.load(`${F.aW} 40px "${F.aFam}"`, S.author),
+      document.fonts.load('500 40px Inter'),
+    ]).catch(() => {});
+    const r = stage.getBoundingClientRect(), pad = innerWidth < 820 ? 32 : 56;
+    const s = Math.min((r.width - pad) / S.W, (r.height - pad) / S.H);
+    const cw = Math.max(1, S.W * s), ch = Math.max(1, S.H * s), dpr = devicePixelRatio || 1;
+    view.style.width = cw + 'px'; view.style.height = ch + 'px';
+    view.width = Math.round(cw * dpr); view.height = Math.round(ch * dpr);
+    render(view, view.width, view.height);
+  });
+}
+
+let stT;
+function status(msg, ms = 0){
+  const el = $('#status'); clearTimeout(stT);
+  if (!msg){ el.style.opacity = 0; return; }
+  el.textContent = msg; el.style.opacity = 1;
+  if (ms) stT = setTimeout(() => el.style.opacity = 0, ms);
+}
+
+/* ---------- arka plan ---------- */
+function bgURL(){
+  if (S.bg.type === 'url') return S.bg.url;
+  const k = Math.min(1, 3840 / Math.max(S.W, S.H)), wh = `${Math.round(S.W * k)}/${Math.round(S.H * k)}`;
+  if (S.bg.type === 'id') return `https://picsum.photos/id/${S.bg.id}/${wh}`;
+  if (S.bg.type === 'picsum') return `https://picsum.photos/seed/${encodeURIComponent(S.bg.seed)}/${wh}`;
+  return null;
+}
+function loadImg(src){
+  return new Promise((res, rej) => {
+    const i = new Image(); i.crossOrigin = 'anonymous';
+    i.onload = () => res(i); i.onerror = rej; i.src = src;
+  });
+}
+async function loadBg(){
+  if (S.bg.type === 'none'){ img = null; imgKey = ''; draw(); return; }
+  if (S.bg.type === 'file') { draw(); return; }
+  const src = bgURL(); if (src === imgKey) { draw(); return; }
+  imgKey = src; status('Görsel yükleniyor…');
+  try {
+    const i = await loadImg(src);
+    if (imgKey !== src) return; // daha yeni bir istek var
+    img = i; status(); draw();
+  } catch(e){
+    if (imgKey === src) status('Görsel yüklenemedi', 3000);
+  }
+}
+function useFile(file){
+  if (!file || !file.type.startsWith('image/')) return;
+  const url = URL.createObjectURL(file);
+  loadImg(url).then(i => {
+    img = i; imgKey = url; S.bg = {type:'file'}; S.fx = S.fy = 50; S.zoom = 100;
+    sync(); markThumb(); draw();
+  });
+}
+
+const filtered = () => S.tag ? ARKAPLANLAR.filter(r => r[3].includes(S.tag)) : ARKAPLANLAR;
+function thumbs(){
+  const list = filtered();
+  // ortalama renk yer tutucu olarak arkada durur; küçük resimler kaydırdıkça yüklenir
+  const html = list.map(([id, , c]) =>
+    `<img loading="lazy" data-id="${id}" style="background:${c}" src="https://picsum.photos/id/${id}/300/200" alt="">`).join('');
+  $('#thumbs').innerHTML = html;
+  if (!$('#gal').hidden) $('#galGrid').innerHTML = html.replaceAll('/300/200', '/480/320');
+  const chips = TAGS.map(([t, n]) => {
+    const cnt = t ? ARKAPLANLAR.filter(r => r[3].includes(t)).length : ARKAPLANLAR.length;
+    return `<button data-tag="${t}" class="${S.tag === t ? 'on' : ''}">${n}<em>${cnt}</em></button>`;
+  }).join('');
+  document.querySelectorAll('[data-chips]').forEach(el => el.innerHTML = chips);
+  markThumb();
+}
+function markThumb(scroll){
+  document.querySelectorAll('#thumbs img, #galGrid img').forEach(el => {
+    const on = S.bg.type === 'id' && +el.dataset.id === S.bg.id;
+    el.classList.toggle('on', on);
+    if (on && scroll) el.scrollIntoView({block:'nearest'});
+  });
+  const r = S.bg.type === 'id' && BG_BY_ID.get(S.bg.id);
+  $('#credit').innerHTML = r ? `Fotoğraf: ${r[1]} · Unsplash` : '';
+  $('#credit').hidden = !r;
+}
+function pickBg(id, scroll){
+  S.bg = {type:'id', id}; S.fx = S.fy = 50; S.zoom = 100;
+  sync(); markThumb(scroll); loadBg();
+}
+function stepBg(d){
+  const list = filtered(); if (!list.length) return;
+  const i = list.findIndex(r => S.bg.type === 'id' && r[0] === S.bg.id);
+  pickBg(list[(i + d + list.length) % list.length][0], true);
+}
+
+/* ---------- boyutlar ---------- */
+function buildSizes(){
+  const sw = Math.round(screen.width * devicePixelRatio), sh = Math.round(screen.height * devicePixelRatio);
+  let h = `<option value="screen">Bu ekran — ${sw}×${sh}</option>`;
+  for (const [g, items] of SIZES)
+    h += `<optgroup label="${g}">` + items.map(([id, n, w, hh]) => `<option value="${id}">${n} — ${w}×${hh}</option>`).join('') + '</optgroup>';
+  h += '<option value="custom">Özel boyut</option>';
+  $('#sizeSel').innerHTML = h;
+}
+function setPreset(id){
+  S.preset = id;
+  if (id === 'screen'){ S.W = Math.round(screen.width * devicePixelRatio); S.H = Math.round(screen.height * devicePixelRatio); }
+  for (const [, items] of SIZES) for (const [k, , w, h] of items) if (k === id){ S.W = w; S.H = h; }
+  sync(); loadBg();
+}
+
+/* ---------- form bağlama ---------- */
+const fmtOut = {size: v => (+v).toFixed(1), width: v => v + '%', posY: v => v + '%', box: v => v + '%', textOp: v => v + '%',
+  dark: v => v + '%', blur: v => v, zoom: v => v + '%', fx: v => v + '%', fy: v => v + '%'};
+function sync(){
+  document.querySelectorAll('[data-k]').forEach(el => {
+    const k = el.dataset.k;
+    if (el.type === 'checkbox') el.checked = !!S[k];
+    else if (document.activeElement !== el) el.value = S[k];
+  });
+  document.querySelectorAll('[data-o]').forEach(o => o.textContent = fmtOut[o.dataset.o](S[o.dataset.o]));
+  document.querySelectorAll('[data-style]').forEach(b => b.classList.toggle('on', b.dataset.style === S.style));
+  document.querySelectorAll('[data-align]').forEach(b => b.classList.toggle('on', b.dataset.align === S.align));
+  document.querySelectorAll('[data-only]').forEach(el => el.hidden = !el.dataset.only.split(' ').includes(S.style));
+  $('#sizeSel').value = S.preset;
+  if (document.activeElement !== $('#wIn')) $('#wIn').value = S.W;
+  if (document.activeElement !== $('#hIn')) $('#hIn').value = S.H;
+  save();
+}
+
+$('#fontSel').innerHTML = Object.entries(FONTS).map(([k, f]) => `<option value="${k}">${f.label}</option>`).join('');
+
+document.addEventListener('input', e => {
+  const k = e.target.dataset.k; if (!k) return;
+  const el = e.target;
+  S[k] = el.type === 'checkbox' ? el.checked : el.type === 'range' ? +el.value : el.value;
+  if (k === 'bgColor' && S.bg.type !== 'none' && !img) S.bg = {type:'none'};
+  sync(); draw();
+});
+$('#styles').onclick = e => {
+  const b = e.target.closest('[data-style]'); if (!b) return;
+  const st = STYLES[S.style = b.dataset.style];
+  S.font = st.font; S.size = st.size;
+  sync(); draw();
+};
+$('#alignSeg').onclick = e => { const b = e.target.closest('[data-align]'); if (b){ S.align = b.dataset.align; sync(); draw(); } };
+$('#randQuote').onclick = () => {
+  let q; do q = QUOTES[Math.floor(Math.random() * QUOTES.length)]; while (q[0] === S.quote && QUOTES.length > 1);
+  [S.quote, S.author] = q; sync(); draw();
+};
+$('#thumbs').onclick = $('#galGrid').onclick = e => {
+  const id = e.target.dataset?.id; if (!id) return;
+  pickBg(+id);
+  if (e.currentTarget.id === 'galGrid') $('#gal').hidden = true;
+};
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-tag]'); if (!b) return;
+  S.tag = b.dataset.tag; save(); thumbs();
+  $('#thumbs').scrollTop = $('#galGrid').scrollTop = 0;
+});
+$('#randBg').onclick = () => { const l = filtered(); if (l.length) pickBg(l[Math.floor(Math.random() * l.length)][0], true); };
+$('#openGal').onclick = () => { $('#gal').hidden = false; thumbs(); markThumb(true); };
+$('#closeGal').onclick = () => $('#gal').hidden = true;
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') $('#gal').hidden = true;
+  if (e.target.closest('input,textarea,select') || !$('#gal').hidden) return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); stepBg(1); }
+  if (e.key === 'ArrowLeft') { e.preventDefault(); stepBg(-1); }
+});
+$('#file').onchange = e => useFile(e.target.files[0]);
+$('#urlIn').onchange = e => {
+  const u = e.target.value.trim(); if (!u) return;
+  S.bg = {type:'url', url:u}; sync(); markThumb(); loadBg();
+};
+$('#noImg').onclick = () => { S.bg = {type:'none'}; sync(); markThumb(); loadBg(); };
+$('#sizeSel').onchange = e => setPreset(e.target.value);
+const customSize = () => {
+  const w = +$('#wIn').value, h = +$('#hIn').value;
+  if (w >= 200 && h >= 200 && w <= 8000 && h <= 8000){ S.W = w; S.H = h; S.preset = 'custom'; sync(); loadBg(); }
+};
+$('#wIn').onchange = customSize; $('#hIn').onchange = customSize;
+$('#swap').onclick = () => { [S.W, S.H] = [S.H, S.W]; S.preset = 'custom'; sync(); loadBg(); };
+
+$('#dl').onclick = () => {
+  const cv = document.createElement('canvas'); cv.width = S.W; cv.height = S.H;
+  render(cv, S.W, S.H);
+  const jpg = $('#fmt').value === 'jpg';
+  const name = (S.quote.toLocaleLowerCase('tr-TR').replace(/[çğıöşü]/g, ch => ({ç:'c',ğ:'g',ı:'i',ö:'o',ş:'s',ü:'u'}[ch]))
+    .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'soz') + `-${S.W}x${S.H}.${jpg ? 'jpg' : 'png'}`;
+  try {
+    cv.toBlob(b => {
+      const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+      status(`İndirildi · ${S.W}×${S.H}`, 2500);
+    }, jpg ? 'image/jpeg' : 'image/png', .93);
+  } catch(e){
+    status('Bu bağlantıdaki görsel dışa aktarılamıyor; görseli indirip "Yükle" ile ekle.', 5000);
+  }
+};
+
+/* sürükle-bırak ve yapıştır */
+let dragN = 0;
+addEventListener('dragenter', e => { if (e.dataTransfer.types.includes('Files')){ dragN++; $('#drop').hidden = false; } });
+addEventListener('dragleave', () => { if (--dragN <= 0){ dragN = 0; $('#drop').hidden = true; } });
+addEventListener('dragover', e => e.preventDefault());
+addEventListener('drop', e => { e.preventDefault(); dragN = 0; $('#drop').hidden = true; useFile(e.dataTransfer.files[0]); });
+addEventListener('paste', e => {
+  const it = [...(e.clipboardData?.items || [])].find(i => i.type.startsWith('image/'));
+  if (it) useFile(it.getAsFile());
+});
+new ResizeObserver(draw).observe(stage);
+
+buildSizes(); thumbs(); sync(); loadBg();
+document.fonts.ready.then(draw);
+</script>
+</body>
+</html>
